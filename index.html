@@ -1,116 +1,217 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BLEEDBLUEARMY🇮🇳</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0f172a;
-      color: white;
-      text-align: center;
-    }
-    header {
-      background: #1e3a8a;
-      padding: 15px;
-      font-size: 20px;
-      font-weight: bold;
-      border-bottom: 2px solid #2563eb;
-    }
-    .container {
-      max-width: 800px;
-      margin: 20px auto;
-      padding: 10px;
-    }
-    video {
-      width: 100%;
-      height: auto;
-      border-radius: 10px;
-      box-shadow: 0px 0px 12px rgba(0,0,0,0.6);
-      background: black;
-    }
-    .card {
-      background: #1e293b;
-      margin-top: 20px;
-      padding: 15px;
-      border-radius: 10px;
-    }
-    .btn {
-      display: block;
-      background: #2563eb;
-      color: white;
-      text-decoration: none;
-      padding: 12px;
-      border-radius: 8px;
-      font-weight: bold;
-      margin-top: 10px;
-    }
-    .btn:hover {
-      background: #1d4ed8;
-    }
-    .small {
-      font-size: 14px;
-      color: #cbd5e1;
-      margin-top: 8px;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BLEEDBLUEARMY🇮🇳</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+      text-align: center;
+    }
+    header {
+      background: #1e3a8a;
+      padding: 15px;
+      font-size: 20px;
+      font-weight: bold;
+      border-bottom: 2px solid #2563eb;
+    }
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 10px;
+    }
+    .video-frame {
+      width: 100%;
+      height: 450px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 12px rgba(0,0,0,0.6);
+      overflow: hidden;
+    }
+    .video-frame iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    .card {
+      background: #1e293b;
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 10px;
+    }
+    .btn {
+      display: block;
+      background: #2563eb;
+      color: white;
+      text-decoration: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    .btn:hover {
+      background: #1d4ed8;
+    }
+    .small {
+      font-size: 14px;
+      color: #cbd5e1;
+      margin-top: 8px;
+    }
+
+    /* Telegram Modal Styles */
+    .popup-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10002;
+    }
+    .popup-box {
+      width: 320px;
+      background: rgba(20, 20, 30, 0.8);
+      border: 1px solid rgba(173, 216, 230, 0.25);
+      border-radius: 20px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 0 25px rgba(0, 255, 255, 0.4), 0 0 80px rgba(173, 216, 230, 0.15);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      animation: fadeIn 0.5s ease forwards;
+      position: relative;
+    }
+    @keyframes fadeIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .popup-header {
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(45deg, #00eaff, #bd00ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.4rem;
+      text-shadow: 0 0 8px rgba(0, 255, 255, 0.4);
+    }
+    .popup-subtitle {
+      font-size: 1rem;
+      color: #aaa;
+      margin-bottom: 1.2rem;
+    }
+    .popup-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+    .popup-buttons a,
+    .popup-buttons button {
+      padding: 0.8rem;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.35s ease;
+      border: none;
+    }
+    .join-btn {
+      background: linear-gradient(135deg, #00eaff, #9c00ff);
+      box-shadow: 0 0 12px rgba(0, 255, 255, 0.4);
+    }
+    .join-btn:hover {
+      background: linear-gradient(135deg, #00ffff, #c000ff);
+      box-shadow: 0 0 16px rgba(0, 255, 255, 0.6);
+    }
+    .already-btn {
+      background: rgba(255,255,255,0.05);
+    }
+    .already-btn:hover {
+      background: rgba(255,255,255,0.15);
+    }
+    .close-btn {
+      position: absolute;
+      top: 12px;
+      right: 18px;
+      font-size: 1.3rem;
+      color: #00eaff;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    .close-btn:hover {
+      color: #ff00cc;
+    }
+  </style>
 </head>
 <body>
-  <header>BLEEDBLUEARMY🇮🇳</header>
+  <header>BLEEDBLUEARMY🇮🇳</header>
 
-  <div class="container">
-    <!-- M3U8 Video Player -->
-    <video id="video" controls></video>
+  <div class="container">
+    <!-- Live Match iframe in styled container -->
+    <div class="video-frame" id="videoFrame">
+      <iframe src="https://cricketstan.github.io/Channel-14" allowfullscreen></iframe>
+    </div>
 
-    <!-- Telegram Join Section -->
-    <div class="card">
-      <h3>📣 Follow us for Updates!</h3>
-      <a href="https://t.me/+_WN9XxoZT8QxZmI1" class="btn" target="_blank">Join Telegram Channel</a>
-      <p class="small">Click above to join on Telegram</p>
-    </div>
+    <!-- Telegram Join Section -->
+    <div class="card">
+      <h3>📣 Follow us for Updates!</h3>
+      <a href="https://t.me/+_WN9XxoZT8QxZmI1" class="btn" target="_blank">Join Telegram Channel</a>
+      <p class="small">Click above to join on Telegram</p>
+    </div>
 
-    <!-- Share Section -->
-    <div class="card">
-      <h3>Copy Link & Open in Chrome Browser Only</h3>
-      <a href="#" class="btn" id="copyLink">Copy Page Link</a>
-      <p class="small">If link doesn’t open, paste it manually in Chrome.</p>
-    </div>
-  </div>
+    <!-- Share Section -->
+    <div class="card">
+      <h3>Copy Link & Open in Chrome Browser Only</h3>
+      <a href="#" class="btn" id="copyLink">Copy Page Link</a>
+      <p class="small">If link doesn’t open, paste it manually in Chrome.</p>
+    </div>
+  </div>
 
-  <!-- HLS.js Script for m3u8 -->
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-  <script>
-    var video = document.getElementById('video');
+  <!-- Telegram Popup -->
+  <div class="popup-overlay" id="telegramPopup">
+    <div class="popup-box">
+      <button class="close-btn" onclick="closePopup()">×</button>
+      <div class="popup-header">Support Us!</div>
+      <div class="popup-subtitle">Join our Telegram for latest updates.</div>
+      <div class="popup-buttons">
+        <a href="https://t.me/+_WN9XxoZT8QxZmI1" target="_blank" class="join-btn">Join Now</a>
+        <button class="already-btn" onclick="closePopup()">Already Joined</button>
+      </div>
+    </div>
+  </div>
 
-    // ✅ Your M3U8 Link
-    var videoSrc = "https://dontknow@hocdn.news/Willow_Cricket_Live_TV/tracks-v1a1/mono.m3u8";
+  <script>
+    // Telegram popup auto show
+    window.onload = function() {
+      setTimeout(() => {
+        document.getElementById('telegramPopup').style.display = 'flex';
+      }, 1000);
+    }
 
-    if (Hls.isSupported()) {
-      var hls = new Hls();
-      hls.loadSource(videoSrc);
-      hls.attachMedia(video);
-    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-      video.src = videoSrc;
-    }
+    function closePopup() {
+      document.getElementById('telegramPopup').style.display = 'none';
+    }
 
-    // Redirect to Telegram once on first play
-    video.addEventListener('play', function(e) {
-      if (!localStorage.getItem("visitedTelegram")) {
-        video.pause(); // stop video
-        localStorage.setItem("visitedTelegram", "true"); // mark as visited
-        window.location.href = "https://t.me/+_WN9XxoZT8QxZmI1"; // redirect
-      }
-    });
+    // Copy link button
+    document.getElementById("copyLink").addEventListener("click", function(e) {
+      e.preventDefault();
+      navigator.clipboard.writeText(window.location.href);
+      alert("Page link copied!");
+    });
 
-    // Copy link button
-    document.getElementById("copyLink").addEventListener("click", function(e) {
-      e.preventDefault();
-      navigator.clipboard.writeText(window.location.href);
-      alert("Page link copied!");
-    });
-  </script>
+    // First interaction redirect to Telegram
+    const videoFrame = document.getElementById('videoFrame');
+    videoFrame.addEventListener('click', function() {
+      if (!localStorage.getItem("visitedTelegram")) {
+        localStorage.setItem("visitedTelegram", "true");
+        window.location.href = "https://t.me/+_WN9XxoZT8QxZmI1";
+      }
+    });
+  </script>
 </body>
 </html>
-
