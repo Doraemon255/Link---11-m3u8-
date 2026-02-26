@@ -1,97 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BLEEDBLUEARMY🇮🇳 MPD Player</title>
-
-<!-- Shaka Player -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css">
+<title>BLEEDBLUEARMY | Live</title>
 
 <style>
-html, body {
+body {
   margin: 0;
-  padding: 0;
-  background: black;
-  width: 100%;
-  height: 100%;
+  font-family: Arial, sans-serif;
+  background: #0f172a;
+  color: white;
+  text-align: center;
 }
 
-#player-container {
-  width: 100vw;
-  height: 100vh;
+header {
+  background: #1e3a8a;
+  padding: 20px 0;
+  font-size: 24px;
+  font-weight: bold;
 }
 
-video {
-  width: 100%;
-  height: 100%;
-  background: black;
+.container {
+  padding: 20px;
+}
+
+.box {
+  background: #1e293b;
+  padding: 18px;
+  margin: 20px auto;
+  width: 90%;
+  border-radius: 12px;
+  border: 1px solid #2563eb;
+}
+
+.btn {
+  display: block;
+  background: #2563eb;
+  padding: 12px;
+  color: white;
+  text-decoration: none;
+  margin: 10px auto;
+  width: 80%;
+  border-radius: 10px;
+  font-weight: bold;
+}
+
+.btn:hover {
+  background: #3b5edb;
+}
+
+.small {
+  font-size: 14px;
+  color: #cbd5e1;
+  margin-top: 6px;
 }
 </style>
 </head>
 
 <body>
 
-<div id="player-container" data-shaka-player-container>
-  <video id="video" autoplay muted playsinline></video>
+<header>BLEEDBLUEARMY🇮🇳 Live</header>
+
+<div class="container">
+
+  <div class="box">
+    <p style="font-size:18px;">⚡ Something went wrong. Please try again.</p>
+    <a href="#" class="btn" id="retryBtn">Retry</a>
+  </div>
+
+  <div class="box">
+    <p style="font-size:18px; font-weight:bold;">Join Our Telegram</p>
+    <a href="https://t.me/+_WN9XxoZT8QxZmI1" class="btn" target="_blank">Join Now</a>
+    <p class="small">Already joined?</p>
+  </div>
+
+  <div class="box">
+    <p style="font-size:18px;">Follow Us for Updates!</p>
+    <a href="https://t.me/+_WN9XxoZT8QxZmI1" class="btn" target="_blank">Join Telegram For More Links</a>
+  </div>
+
+  <div class="box">
+    <p style="font-size:18px;">Share this Page Link ❤️</p>
+    <a href="#" class="btn" id="copyLink">Copy Page Link</a>
+  </div>
+
 </div>
 
 <script>
-async function initPlayer() {
+// Retry Refresh
+document.getElementById("retryBtn").addEventListener("click", function(e) {
+  e.preventDefault();
+  location.reload();
+});
 
-  // Install polyfills
-  shaka.polyfill.installAll();
-
-  // Check browser support
-  if (!shaka.Player.isBrowserSupported()) {
-    alert("Browser not supported");
-    return;
-  }
-
-  const video = document.getElementById("video");
-  const container = document.getElementById("player-container");
-
-  // Create player & UI
-  const player = new shaka.Player(video);
-  const ui = new shaka.ui.Overlay(player, container, video);
-
-  // ClearKey DRM configuration
-  player.configure({
-    drm: {
-      clearKeys: {
-        "baafdb8ebcbbc0655332291da6f121da":
-        "60ac892e0ea0b2c46fc6837c97ed641a"
-      }
-    }
-  });
-
-  // UI controls
-  ui.configure({
-    controlPanelElements: [
-      "play_pause",
-      "mute",
-      "volume",
-      "time_and_duration",
-      "quality",
-      "fullscreen"
-    ]
-  });
-
-  try {
-    await player.load(
-      "https://live-pv-ta.amazon.fastly-edge.com/lhr-nitro/live/clients/dash/enc/wwrmho82pc/out/v1/d7130f460d41486ea7e8e3eb45f0522f/cenc.mpd"
-    );
-    console.log("MPD loaded");
-    video.play().catch(()=>{});
-  } catch (error) {
-    console.error("Playback error:", error);
-    alert("MPD loaded but segments are blocked (CDN restriction)");
-  }
-}
-
-// Start player
-document.addEventListener("DOMContentLoaded", initPlayer);
+// Copy page link
+document.getElementById("copyLink").addEventListener("click", function(e) {
+  e.preventDefault();
+  navigator.clipboard.writeText(window.location.href);
+  alert("Page URL copied!");
+});
 </script>
 
 </body>
