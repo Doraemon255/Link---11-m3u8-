@@ -3,113 +3,95 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BLEEDBLUEARMY🇮🇳</title>
+<title>BLEEDBLUEARMY🇮🇳 MPD Player</title>
+
+<!-- Shaka Player -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css">
 
 <style>
-body {
+html, body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #0f172a;
-  color: white;
-  text-align: center;
-}
-
-header {
-  background: #1e3a8a;
-  padding: 16px;
-  font-size: 22px;
-  font-weight: bold;
-}
-
-.container {
-  max-width: 700px;
-  margin: 30px auto;
-  padding: 15px;
-}
-
-.fake-player {
+  padding: 0;
   background: black;
-  border-radius: 16px;
-  height: 350px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  border: 2px solid #2563eb;
+  width: 100%;
+  height: 100%;
 }
 
-.play-btn {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: rgba(0,0,0,0.7);
-  border: 3px solid cyan;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+#player-container {
+  width: 100vw;
+  height: 100vh;
 }
 
-.play-btn:before {
-  content: '';
-  margin-left: 6px;
-  border-style: solid;
-  border-width: 16px 0 16px 28px;
-  border-color: transparent transparent transparent cyan;
-}
-
-.card {
-  margin-top: 25px;
-  background: #1e293b;
-  padding: 18px;
-  border-radius: 14px;
-}
-
-.btn {
-  display: inline-block;
-  margin-top: 10px;
-  padding: 12px 22px;
-  background: #2563eb;
-  color: white;
-  text-decoration: none;
-  border-radius: 10px;
-  font-weight: bold;
+video {
+  width: 100%;
+  height: 100%;
+  background: black;
 }
 </style>
 </head>
 
 <body>
 
-<header>BLEEDBLUEARMY🇮🇳</header>
-
-<div class="container">
-
-  <div class="fake-player" id="play">
-    <div class="play-btn"></div>
-  </div>
-
-  <div class="card">
-    <h3>Watch Live Match on Telegram</h3>
-    <a class="btn" href="https://t.me/+_WN9XxoZT8QxZmI1" target="_blank">
-      Join Telegram Channel
-    </a>
-  </div>
-
-  <div class="card">
-    <a class="btn" href="#" id="copy">Copy Page Link</a>
-  </div>
-
+<div id="player-container" data-shaka-player-container>
+  <video id="video" autoplay muted playsinline></video>
 </div>
 
 <script>
-document.getElementById("play").onclick = function () {
-  window.location.href = "https://t.me/+_WN9XxoZT8QxZmI1";
-};
+async function initPlayer() {
 
-document.getElementById("copy").onclick = function (e) {
-  e.preventDefault();
-  navigator.clipboard.writeText(window.location.href);
-  alert("Link copied");
-};
+  // Install polyfills
+  shaka.polyfill.installAll();
+
+  // Check browser support
+  if (!shaka.Player.isBrowserSupported()) {
+    alert("Browser not supported");
+    return;
+  }
+
+  const video = document.getElementById("video");
+  const container = document.getElementById("player-container");
+
+  // Create player & UI
+  const player = new shaka.Player(video);
+  const ui = new shaka.ui.Overlay(player, container, video);
+
+  // ClearKey DRM configuration
+  player.configure({
+    drm: {
+      clearKeys: {
+        "baafdb8ebcbbc0655332291da6f121da":
+        "60ac892e0ea0b2c46fc6837c97ed641a"
+      }
+    }
+  });
+
+  // UI controls
+  ui.configure({
+    controlPanelElements: [
+      "play_pause",
+      "mute",
+      "volume",
+      "time_and_duration",
+      "quality",
+      "fullscreen"
+    ]
+  });
+
+  try {
+    await player.load(
+      "https://live-pv-ta.amazon.fastly-edge.com/lhr-nitro/live/clients/dash/enc/wwrmho82pc/out/v1/d7130f460d41486ea7e8e3eb45f0522f/cenc.mpd"
+    );
+    console.log("MPD loaded");
+    video.play().catch(()=>{});
+  } catch (error) {
+    console.error("Playback error:", error);
+    alert("MPD loaded but segments are blocked (CDN restriction)");
+  }
+}
+
+// Start player
+document.addEventListener("DOMContentLoaded", initPlayer);
 </script>
 
 </body>
