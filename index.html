@@ -1,48 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>DASH ClearKey Player</title>
-
-    <!-- Dash.js CDN -->
-    <script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
-
-    <style>
-        body {
-            background: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        video {
-            width: 90%;
-            max-width: 900px;
-            outline: none;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Working ClearKey Test</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.10/shaka-player.compiled.js"></script>
+<style>
+body { margin:0; background:black; }
+video { width:100vw; height:100vh; }
+</style>
 </head>
 <body>
 
-<video id="videoPlayer" controls autoplay></video>
+<video id="v" controls autoplay></video>
 
 <script>
-    const video = document.getElementById("videoPlayer");
-    const player = dashjs.MediaPlayer().create();
+(async () => {
+  const video = document.getElementById("v");
+  const player = new shaka.Player(video);
 
-    player.initialize(video, 
-        "https://a201aivottlinear-a.akamaihd.net/OTTB/pdx-nitro/live/clients/dash/enc/rxhxc14ikz/out/v1/bb976c39247941f3b4c9fa0a0735426d/cenc.mpd", 
-        true
-    );
+  player.configure({
+    drm: {
+      clearKeys: {
+        "1ae8ccd0e2b240c3b8d9c9b6a1b6b8c2": "3d5e6f7a8b9c0d1e2f3a4b5c6d7e8f90"
+      }
+    }
+  });
 
-    player.setProtectionData({
-        "org.w3.clearkey": {
-            "clearkeys": {
-                "2904b17cb64c996dbc254981b7602863": "66a7ef671b84498e64f94e8401fe8cb9"
-            }
-        }
-    });
+  await player.load(
+    "https://storage.googleapis.com/shaka-demo-assets/angel-one-clearkey/dash.mpd"
+  );
+})();
 </script>
 
 </body>
